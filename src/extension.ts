@@ -52,11 +52,11 @@ export function activate(context: vscode.ExtensionContext) {
 					stylesheetPath = path.join(assetsFolderPath, `${fileName}-stylesheet.css`);
 					fs.writeFileSync(stylesheetPath, '');
 					sectionContent += `<link rel="stylesheet" href="{{ '${fileName}-stylesheet.css' | asset_url }}" media="print" onload="this.media='all'">`;
-				} else if (addStylesheet?.label === 'Pre Loaded (For first fold content)') {
+				} else if (addStylesheet?.label === 'Pre Loaded') {
 					stylesheetPath = path.join(assetsFolderPath, `${fileName}-stylesheet.css`);
 					fs.writeFileSync(stylesheetPath, '');
-					sectionContent += `<link rel="preload" href="{{ '${fileName}-stylesheet.css' | asset_url }}" as="style" onload="this.rel='stylesheet'">`;
-				} else if (addStylesheet?.label === 'Render Blocking (not recommended)') {
+					sectionContent += `{{ '${fileName}-stylesheet.css' | asset_url | stylesheet_tag: preload: true  }}`;
+				} else if (addStylesheet?.label === 'Render Blocking') {
 					stylesheetPath = path.join(assetsFolderPath, `${fileName}-stylesheet.css`);
 					fs.writeFileSync(stylesheetPath, '');
 					sectionContent += `<link rel="stylesheet" href="{{ '${fileName}-stylesheet.css' | asset_url }}">`;
@@ -100,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
 						scriptTag = 'async';
 					} else if (scriptOption?.label === 'Defer') {
 						scriptTag = 'defer';
-					} // No need to set anything for "Render Blocking" since it defaults to blocking mode
+					}
 				
 					sectionContent += `\n<script src="{{ '${fileName}-javascript.js' | asset_url }}" ${scriptTag}></script>\n`;
 				}						
